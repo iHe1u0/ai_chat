@@ -26,12 +26,24 @@ class ChatBubble extends StatelessWidget {
                 const SizedBox(height: 4),
                 Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 108, 161, 205),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Text(message.content, style: const TextStyle(color: Colors.white)),
+                  // child: SafeArea(
+                  //   child: MarkdownBody(
+                  //     data: message.content,
+                  //     selectable: true,
+                  //     builders: {'latex': LatexElementBuilder(textScaleFactor: 1.0)},
+                  //     extensionSet: md.ExtensionSet([LatexBlockSyntax()], [LatexInlineSyntax()]),
+                  //   ),
+                  // ),
                 ),
               ],
             ),
           ),
+          IconButton(onPressed: () {}, icon: Icon(Icons.stop)),
         ],
       ),
     );

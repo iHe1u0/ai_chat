@@ -1,5 +1,5 @@
-import 'package:chat/models/message.dart';
-import 'package:chat/views/chat/chat_input.dart' show MessageInputField;
+import 'package:chat/viewmodels/chat_viewmodel.dart';
+import 'package:chat/views/chat/chat_input.dart';
 import 'package:flutter/material.dart';
 import 'chat_bubble.dart';
 
@@ -12,31 +12,54 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final List<Message> _messages = [];
   final TextEditingController _controller = TextEditingController();
+  final ChatViewModel _viewModel = ChatViewModel();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _viewModel.addListener(_onMessagesUpdated);
+  }
+
+  void _onMessagesUpdated() {
+    setState(() {}); // Force to refresh UI
+    _scrollToBottom();
+  }
 
   void _sendMessage() {
     if (_controller.text.isNotEmpty) {
-      setState(() {
-        _messages.insert(0, Message(content: _controller.text, timestamp: DateTime.now().microsecondsSinceEpoch));
-      });
+      _viewModel.sendMessage(_controller.text.trim());
       _controller.clear();
+      _scrollToBottom();
     }
+  }
+
+  void _scrollToBottom() {
+    Future.delayed(Duration(milliseconds: 100), () {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text('Chat')),//你可以启用这行
       appBar: null,
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              reverse: true,
-              itemCount: _messages.length,
+              controller: _scrollController,
+              reverse: false,
+              itemCount: _viewModel.messages.length,
               itemBuilder: (context, index) {
-                return ChatBubble(message: _messages[index]); // 使用 ChatBubble 组件
+                return ChatBubble(message: _viewModel.messages[index]);
               },
             ),
           ),
@@ -47,10 +70,11 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    for (var i = 0; i < 1000; i++) {
-      _messages.insert(i, Message(content: "消息$i"));
-    }
+  void dispose() {
+    _scrollController.dispose();
+    _controller.dispose();
+    _viewModel.removeListener(_onMessagesUpdated);
+    _viewModel.dispose();
+    super.dispose();
   }
 }
