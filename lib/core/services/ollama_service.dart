@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:chat/core/config/env.dart';
 import 'package:http/http.dart' as http;
 
 class OllamaService {
-  final String apiUrl = "http://192.168.0.107:11434/api/chat";
+  final String apiUrl = "${Env.apiBaseUrl}/api/chat";
 
   Stream<String> chatWithOllama(String model, List<Map<String, String>> messages) async* {
     var request = http.Request("POST", Uri.parse(apiUrl));
