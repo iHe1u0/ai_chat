@@ -50,7 +50,49 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
+      appBar: AppBar(
+        title: const Text("AI Chat", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        elevation: 2,
+        leading: Builder(
+          builder: (context) => IconButton(icon: Icon(Icons.menu), onPressed: () => Scaffold.of(context).openDrawer()),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              // 加个设置按钮逻辑
+              debugPrint("打开设置");
+            },
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(color: Colors.blueAccent),
+              child: Text('侧边菜单', style: TextStyle(color: Colors.white, fontSize: 24)),
+            ),
+            ListTile(
+              leading: Icon(Icons.chat),
+              title: Text('聊天记录'),
+              onTap: () {
+                debugPrint("进入聊天记录");
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.info),
+              title: Text('关于我们'),
+              onTap: () {
+                debugPrint("查看关于");
+              },
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
