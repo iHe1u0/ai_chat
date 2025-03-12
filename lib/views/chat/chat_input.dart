@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class MessageInputField extends StatelessWidget {
@@ -15,17 +17,31 @@ class MessageInputField extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
-              decoration: const InputDecoration(
-                hintText: '输入消息...',
-                alignLabelWithHint: true, // 可选：确保提示文本与输入文本对齐
-              ),
-              maxLines: 6, // 设置最大行数
-              minLines: 1, // 设置最小行数
-              keyboardType: TextInputType.multiline, // 确保可以输入多行文本
-              textInputAction: TextInputAction.newline, // 支持换行
+              decoration: const InputDecoration(hintText: '输入消息...', alignLabelWithHint: true),
+              maxLines: 6,
+              minLines: 1,
+              keyboardType: TextInputType.multiline,
+              textInputAction: Platform.isWindows ? TextInputAction.send : TextInputAction.newline, // Send Message
+              onSubmitted: (value) {
+                // Enter for send
+                if (value.trim().isNotEmpty) {
+                  onSendMessage();
+                  controller.clear();
+                  FocusScope.of(context).requestFocus(FocusNode());
+                }
+              },
+              autofocus: true,
             ),
           ),
-          IconButton(icon: const Icon(Icons.send), onPressed: onSendMessage),
+          IconButton(
+            icon: const Icon(Icons.send),
+            onPressed: () {
+              if (controller.text.trim().isNotEmpty) {
+                onSendMessage();
+                controller.clear();
+              }
+            },
+          ),
         ],
       ),
     );

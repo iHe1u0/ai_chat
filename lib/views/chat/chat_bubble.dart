@@ -1,6 +1,8 @@
 import 'package:chat/models/message.dart';
 import 'package:chat/widgets/avatar.dart' show Avatar;
 import 'package:flutter/material.dart';
+// ignore: unused_import
+import 'package:flutter_markdown/flutter_markdown.dart' show MarkdownBody;
 
 class ChatBubble extends StatelessWidget {
   final Message message;
@@ -9,6 +11,8 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color secondaryBackground = Theme.of(context).colorScheme.secondaryContainer;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
       child: Row(
@@ -26,24 +30,21 @@ class ChatBubble extends StatelessWidget {
                 const SizedBox(height: 4),
                 Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 108, 161, 205),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(message.content, style: const TextStyle(color: Colors.white)),
+                  decoration: BoxDecoration(color: secondaryBackground, borderRadius: BorderRadius.circular(10)),
+                  child: SelectableText(message.content),
                   // child: SafeArea(
                   //   child: MarkdownBody(
                   //     data: message.content,
                   //     selectable: true,
-                  //     builders: {'latex': LatexElementBuilder(textScaleFactor: 1.0)},
-                  //     extensionSet: md.ExtensionSet([LatexBlockSyntax()], [LatexInlineSyntax()]),
+                  //     // builders: {'latex': LatexElementBuilder(textScaleFactor: 1.0)},
+                  //     // extensionSet: md.ExtensionSet([LatexBlockSyntax()], [LatexInlineSyntax()]),
                   //   ),
                   // ),
                 ),
               ],
             ),
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.stop)),
+          // IconButton(onPressed: () {}, icon: Icon(Icons.stop)),
         ],
       ),
     );

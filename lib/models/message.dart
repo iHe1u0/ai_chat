@@ -21,8 +21,8 @@ class Message {
     this.sender = MessageSender.user,
     this.type = MessageType.text,
     this.status = MessageStatus.sending,
-    this.timestamp = 1006099200,
-  });
+    int? timestamp,
+  }) : timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(

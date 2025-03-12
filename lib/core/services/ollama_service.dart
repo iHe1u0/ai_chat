@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:chat/core/config/env.dart';
+import 'package:chat/models/ollama_message.dart' show OllamaChatApiResponse;
 import 'package:http/http.dart' as http;
 
 class OllamaService {
@@ -13,9 +14,11 @@ class OllamaService {
 
     var response = await request.send();
     await for (var chunk in response.stream.transform(utf8.decoder)) {
-      var data = jsonDecode(chunk);
-      if (data.containsKey("message")) {
-        yield data["message"]["content"];
+      try {
+        String content = OllamaChatApiResponse.fromJson(chunk).message.content;
+        yield content;
+      } catch (e) {
+        yield "_";
       }
     }
   }
