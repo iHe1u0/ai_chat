@@ -1,6 +1,8 @@
+import 'package:chat/routes/app_routes.dart';
 import 'package:chat/viewmodels/chat_viewmodel.dart';
 import 'package:chat/views/chat/chat_input.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart' show Provider;
 import 'chat_bubble.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -13,12 +15,14 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  final ChatViewModel _viewModel = ChatViewModel();
   final ScrollController _scrollController = ScrollController();
+
+  late ChatViewModel _viewModel; // 用 late 延迟初始化
 
   @override
   void initState() {
     super.initState();
+    _viewModel = Provider.of<ChatViewModel>(context, listen: false); // 在 initState 里初始化
     _viewModel.addListener(_onMessagesUpdated);
   }
 
@@ -62,8 +66,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              // 加个设置按钮逻辑
-              debugPrint("打开设置");
+              router.go("/settings");
             },
           ),
         ],
