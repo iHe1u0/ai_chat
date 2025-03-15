@@ -1,5 +1,6 @@
 import 'package:chat/viewmodels/settings_viewmodel.dart' show SettingsViewModel;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -10,7 +11,15 @@ class SettingsScreen extends StatelessWidget {
     final viewModel = Provider.of<SettingsViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('设置')),
+      appBar: AppBar(
+        title: const Text('设置'),
+        leading: IconButton(
+          onPressed: () {
+            context.pop();
+          },
+          icon: Icon(Icons.arrow_back_ios),
+        ),
+      ),
       body: ListView(
         children: [
           ListTile(
@@ -36,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
               value: viewModel.settings.language,
               onChanged: (newValue) => viewModel.setLanguage(newValue!),
               items:
-                  ['中文', 'English', 'Español'].map<DropdownMenuItem<String>>((String value) {
+                  ['中文', 'English'].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(value: value, child: Text(value));
                   }).toList(),
             ),
@@ -56,7 +65,8 @@ class SettingsScreen extends StatelessWidget {
                           viewModel.models.map<DropdownMenuItem<String>>((model) {
                             return DropdownMenuItem<String>(
                               value: model.name,
-                              child: Text('${model.name} (${model.quantizationLevel}, ${model.size})'),
+                              child: Text(model.name),
+                              // child: Text('${model.name} (${model.quantizationLevel}, ${model.size})'),
                             );
                           }).toList(),
                     ),

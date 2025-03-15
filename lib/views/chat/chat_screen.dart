@@ -2,7 +2,8 @@ import 'package:chat/routes/app_routes.dart';
 import 'package:chat/viewmodels/chat_viewmodel.dart';
 import 'package:chat/views/chat/chat_input.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart' show Provider;
+import 'package:provider/provider.dart' show ReadContext;
+
 import 'chat_bubble.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    _viewModel = Provider.of<ChatViewModel>(context, listen: false); // 在 initState 里初始化
+    _viewModel = context.read<ChatViewModel>(); // 用 Provider 管理，不要重复创建
     _viewModel.addListener(_onMessagesUpdated);
   }
 
@@ -66,7 +67,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
-              router.go("/settings");
+              router.push("/settings");
             },
           ),
         ],
@@ -119,7 +120,6 @@ class _ChatScreenState extends State<ChatScreen> {
     _scrollController.dispose();
     _controller.dispose();
     _viewModel.removeListener(_onMessagesUpdated);
-    _viewModel.dispose();
     super.dispose();
   }
 }

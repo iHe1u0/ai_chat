@@ -28,7 +28,9 @@ void main() async {
         ChangeNotifierProvider(create: (context) => SettingsViewModel()),
         ChangeNotifierProxyProvider<SettingsViewModel, ChatViewModel>(
           create: (context) => ChatViewModel(context.read<SettingsViewModel>()),
-          update: (context, settingsViewModel, previousChatViewModel) => ChatViewModel(settingsViewModel),
+          update:
+              (context, settingsViewModel, previousChatViewModel) =>
+                  previousChatViewModel!..updateSettings(settingsViewModel),
         ),
       ],
       child: const KApp(),

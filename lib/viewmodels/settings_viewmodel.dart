@@ -58,6 +58,7 @@ class SettingsViewModel extends ChangeNotifier {
     prefs.setBool('isDarkMode', _settings.isDarkMode);
     prefs.setBool('notificationsEnabled', _settings.notificationsEnabled);
     prefs.setString('language', _settings.language);
+    prefs.setString('selectedModel', _settings.selectedModel!);
   }
 
   Future<void> fetchModels() async {
